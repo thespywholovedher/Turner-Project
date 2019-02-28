@@ -21,11 +21,16 @@ namespace Server.Services {
             return titles.Find<Title>( title => true).ToList();
         }
 
-        public Title Get(string id)
+        public Title Get(int id)
         {
             var titlesList = this.Get();
 
-            return titlesList.Find( title => title.Id == id);
+            return titlesList.Find( title => title.Number == id);
+        }
+
+        public List<Title> Search(string name)
+        {
+            return titles.Find<Title>( title => title.Name.Contains(name)).ToList();
         }
     }
 }

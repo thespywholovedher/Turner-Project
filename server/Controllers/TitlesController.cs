@@ -22,13 +22,22 @@ namespace Server.Controllers
             return titleService.Get();
         }
 
-        [HttpGet("{id:length(24)}", Name = "GetTitle")]
-        public ActionResult<Title> Get(string id){
+        [HttpGet("{id:int}/details")]
+        public ActionResult<Title> Get(int id){
             var title = titleService.Get(id);
 
             if (title == null) return NotFound();
             
             return  title;
+        }
+
+        [HttpGet("{query}")]
+        public ActionResult<List<Title>> Search(string query)
+        {
+            var title = titleService.Search(query);
+            
+            if (title == null) return NotFound();
+            return title;
         }
     }
 }
