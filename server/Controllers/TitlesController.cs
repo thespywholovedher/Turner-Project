@@ -22,7 +22,7 @@ namespace Server.Controllers
             return titleService.Get();
         }
 
-        [HttpGet("{id}",Name = "GetTitle")]
+        [HttpGet("{id:length(24)}", Name = "GetTitle")]
         public ActionResult<Title> Get(string id){
             var title = titleService.Get(id);
 

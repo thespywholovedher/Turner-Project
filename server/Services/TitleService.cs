@@ -23,7 +23,9 @@ namespace Server.Services {
 
         public Title Get(string id)
         {
-            return titles.Find<Title>( title => title.Id == id).FirstOrDefault();
+            var titlesList = this.Get();
+
+            return titlesList.Find( title => title.Id == id);
         }
     }
 }
