@@ -23,7 +23,7 @@ const getTitle = id => (
 const searchTitles = name => (
     axios({
         method: 'get',
-        url: '/api/titles/${name}',
+        url: `/api/titles/${name}`,
         headers: {
             "Content-Type": "application/json"
         }

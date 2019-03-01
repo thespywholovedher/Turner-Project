@@ -30,7 +30,7 @@ namespace Server.Services {
 
         public List<Title> Search(string name)
         {
-            return titles.Find<Title>( title => title.Name.Contains(name)).ToList();
+            return titles.Find<Title>( title => title.Name.ToLower().Contains(name.ToLower())).ToList();
         }
     }
 }

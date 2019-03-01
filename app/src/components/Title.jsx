@@ -29,11 +29,11 @@ class Title extends Component {
 const TitlePresentation = (props) => {
     const title = props.title;
     return (
-      <div>
-        Id: {title.id}
-        Name: {title.name}
-        Year: {title.year}
-      </div>
+      <ul className="list-group">
+        <li className="list-group-item">Id: {title.id}</li>
+        <li className="list-group-item">Name: {title.name}</li>
+        <li className="list-group-item">Year: {title.releaseYear}</li>
+      </ul>
     );
   }
 

@@ -1,75 +1,56 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Route} from 'react-router-dom';
 import * as TitleAPI from './api/titleAPI';
 import { Title } from './components/Title';
+import TitleList from './components/TitleList';
 
-class SearchLayout extends Component {
- 
+class SearchContainer extends Component {
+  
+  constructor(props){
+    super(props);
+    
+    this.state = {
+      names: [],
+      searchWord: ""
+    };
+  }
 
+  handleInputChange(e) {
+    this.setState({
+      searchWord: e.target.value
+    });
+    //this.props.updateNameList(this.state.searchWord);
+  }
 
+  onFormSubmit(e) {
+    e.preventDefault();
+    this.props.history.push('/Search/' + this.state.searchWord);
+    this.props.updateNameList(this.state.searchWord);
+  }
+  
   render() {
     return (
       <div>
-        <SearchBar />
-
+        {/* {this.state.searchWord} */}
+        <SearchBar 
+          handleChange={this.handleInputChange.bind(this)}
+          onFormSubmit={this.onFormSubmit.bind(this)}
+        />
       </div>
     );
   }
 }
 
-class Results extends Component {
-
-  render() {
-    return (
-       <div>
-         {this.props.children}
-      </div> );
-  }
-}
-
-
-
-class SearchContainer extends Component {
-  
-  state = { name: [] };
-
-  componentDidMount(){}
-
-  search() {
-
-  }
-  
-  render() {
-    return (
-      <SearchBar />
-    );
-  }
-}
-
-const SearchBar = ({ props }) => {
-
+const SearchBar = (props) => {
   return (
-    <div className="">
-      <input  />
-    </div>
-  );
-}
-
-const TitleList = (props) => {
-
-  console.log(props.titles);
-   return (
-      <ul>
-        {
-          props.titles.map( title => 
-            <li key={title.id}>
-              <div><Link to={`api/titles/${title.number}/details`}> {title.name} {title.releaseYear}</Link></div>
-            </li>
-          ) 
-        }
-      </ul>
+    <form onSubmit={props.onFormSubmit}>
+    <input
+      type="text"
+      placeholder="Search..."
+      onChange={props.handleChange}
+    />
+    </form>
   );
 }
 
@@ -77,11 +58,12 @@ class App extends Component {
   
   state = { titles: [] }
 
-  componentDidMount() {
-    TitleAPI.getTitles()
+  updateNameList(name) {
+    TitleAPI.searchTitles(name)
       .then(res => {
         const titles = res.data;
-        this.setState({ titles })})
+        this.setState({ titles });
+      })
       .catch(error => console.error("Error:", error));
   }
   
@@ -89,14 +71,18 @@ class App extends Component {
     return (
       <Router>
         <div className="App">
-          <h1>Titles</h1>
+          <h1>Movies</h1>
 
-
-          <Route path="/" component={SearchLayout} />
-
+          <Route 
+            path="/" 
+            render={props => <SearchContainer {...props} updateNameList={this.updateNameList.bind(this)} />} 
+          />
+          <br />
+          <br />
+          
           <Results>
             <Route 
-              path="/search" 
+              path="/search/:query" 
               render={props => <TitleList {...props} titles={this.state.titles} />}
             />
             <Route
@@ -110,9 +96,12 @@ class App extends Component {
   }
 }
 
-const Sidebar = (props) => {
+const Results = (props) => {
+  return (
+      <div>
+        {props.children}
+    </div> );
 
-};
-
+}
 
 export default App;
